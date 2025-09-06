@@ -17,6 +17,19 @@ public class Opstina implements GenericEntity {
     private Long idOpstina;
 
     private String naziv;
+    
+    public Opstina(){
+        
+    }
+    
+    public Opstina(Long idOpstina, String naziv){
+        this.idOpstina = idOpstina;
+        this.naziv = naziv;
+    }
+    
+    public Opstina(Long idOpstina){
+        this.idOpstina = idOpstina;
+    }
 
     public Long getIdOpstina() {
         return idOpstina;
@@ -31,11 +44,6 @@ public class Opstina implements GenericEntity {
     }
 
     public void setNaziv(String naziv) {
-        this.naziv = naziv;
-    }
-
-    public Opstina(Long idOpstina, String naziv) {
-        this.idOpstina = idOpstina;
         this.naziv = naziv;
     }
 
@@ -60,6 +68,11 @@ public class Opstina implements GenericEntity {
         }
         final Opstina other = (Opstina) obj;
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return naziv;
     }
 
     @Override

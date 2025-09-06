@@ -16,14 +16,23 @@ public class Broj implements GenericEntity {
 
     private Long idBroj;
 
-    private String naziv;
+    private String vrednost;
 
     private Ulica ulica;
 
-    public Broj(Long idBroj, String naziv, Ulica ulica) {
+    public Broj() {
+
+    }
+
+    public Broj(Long idBroj, String vrednost, Ulica ulica) {
         this.idBroj = idBroj;
-        this.naziv = naziv;
+        this.vrednost = vrednost;
         this.ulica = ulica;
+    }
+
+    public Broj(Long idBroj, String vrednost) {
+        this.idBroj = idBroj;
+        this.vrednost = vrednost;
     }
 
     public Long getIdBroj() {
@@ -34,12 +43,12 @@ public class Broj implements GenericEntity {
         this.idBroj = idBroj;
     }
 
-    public String getNaziv() {
-        return naziv;
+    public String getVrednost() {
+        return vrednost;
     }
 
-    public void setNaziv(String naziv) {
-        this.naziv = naziv;
+    public void setVrednost(String vrednost) {
+        this.vrednost = vrednost;
     }
 
     public Ulica getUlica() {
@@ -54,7 +63,7 @@ public class Broj implements GenericEntity {
     public int hashCode() {
         int hash = 7;
         hash = 41 * hash + Objects.hashCode(this.idBroj);
-        hash = 41 * hash + Objects.hashCode(this.naziv);
+        hash = 41 * hash + Objects.hashCode(this.vrednost);
         hash = 41 * hash + Objects.hashCode(this.ulica);
         return hash;
     }
@@ -71,7 +80,7 @@ public class Broj implements GenericEntity {
             return false;
         }
         final Broj other = (Broj) obj;
-        if (!Objects.equals(this.naziv, other.naziv)) {
+        if (!Objects.equals(this.vrednost, other.vrednost)) {
             return false;
         }
         if (!Objects.equals(this.idBroj, other.idBroj)) {
@@ -82,38 +91,50 @@ public class Broj implements GenericEntity {
 
     @Override
     public String toString() {
-        return "Broj{" + "idBroj=" + idBroj + ", naziv=" + naziv + ", ulica=" + ulica + '}';
+        return vrednost;
     }
-
 
     @Override
     public String getTableName() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "broj";
     }
 
     @Override
     public String getColumnNamesForInsert() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "(idbroj, vrednost, idulica, idmesto, idopstina)";
     }
 
     @Override
     public String getInsertValues() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        StringBuilder sb = new StringBuilder();
+        sb.append("(")
+                .append("broj_pk_seq.nextval").append(",")
+                .append("'").append(vrednost).append("'").append(",")
+                .append(ulica.getIdUlica()).append(",")
+                .append(ulica.getMesto().getIdMesto()).append(",")
+                .append(ulica.getMesto().getOpstina().getIdOpstina())
+                .append(") ")
+                .append("returning idbroj into ?");
+        return sb.toString();
     }
 
     @Override
     public void setId(Long id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        idBroj = id;
+    }
+
+    public String getWhereClause(Broj broj) {
+        return "b.vrednost = '" + broj.getVrednost() + "' and idulica = " + broj.getUlica().getIdUlica() + " and idmesto = " + broj.getUlica().getMesto().getIdMesto() + " and idopstina = " + broj.getUlica().getMesto().getOpstina().getIdOpstina();
     }
 
     @Override
     public String getSelectedValues() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "select b.idbroj, b.vrednost, b.idulica, b.idmesto, b.idopstina from broj b";
     }
 
     @Override
     public GenericEntity getNewObject(ResultSet rs) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return new Broj(rs.getLong("idbroj"), rs.getString("vrednost"), new Ulica(rs.getLong("idulica"), new Mesto(rs.getLong("idmesto"), new Opstina(rs.getLong("idopstina")))));
     }
 
     @Override

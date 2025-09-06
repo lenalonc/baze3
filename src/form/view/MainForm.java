@@ -27,18 +27,24 @@ public class MainForm extends javax.swing.JFrame {
     private void initComponents() {
 
         jMenuBar1 = new javax.swing.JMenuBar();
-        RSS = new javax.swing.JMenu();
+        doc = new javax.swing.JMenu();
         itemUgovori = new javax.swing.JMenuItem();
         itemRasporedi = new javax.swing.JMenuItem();
         itemIzvestaji = new javax.swing.JMenuItem();
         itemSastavi = new javax.swing.JMenuItem();
         itemUtakmice = new javax.swing.JMenuItem();
+        org = new javax.swing.JMenu();
+        itemDelegati = new javax.swing.JMenuItem();
+        itemSudije = new javax.swing.JMenuItem();
+        itemEkipe = new javax.swing.JMenuItem();
+        itemIgraci = new javax.swing.JMenuItem();
+        itemHale = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jMenuBar1.setToolTipText("");
 
-        RSS.setText("Meni");
+        doc.setText("Dokumenta");
 
         itemUgovori.setText("Ugovori");
         itemUgovori.addActionListener(new java.awt.event.ActionListener() {
@@ -46,21 +52,45 @@ public class MainForm extends javax.swing.JFrame {
                 itemUgovoriActionPerformed(evt);
             }
         });
-        RSS.add(itemUgovori);
+        doc.add(itemUgovori);
 
         itemRasporedi.setText("Rasporedi");
-        RSS.add(itemRasporedi);
+        doc.add(itemRasporedi);
 
         itemIzvestaji.setText("Izvestaji");
-        RSS.add(itemIzvestaji);
+        doc.add(itemIzvestaji);
 
         itemSastavi.setText("Sastavi ekipa");
-        RSS.add(itemSastavi);
+        doc.add(itemSastavi);
 
         itemUtakmice.setText("Utakmice");
-        RSS.add(itemUtakmice);
+        doc.add(itemUtakmice);
 
-        jMenuBar1.add(RSS);
+        jMenuBar1.add(doc);
+
+        org.setText("Organizacija");
+
+        itemDelegati.setText("Delegati");
+        itemDelegati.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemDelegatiActionPerformed(evt);
+            }
+        });
+        org.add(itemDelegati);
+
+        itemSudije.setText("Sudije");
+        org.add(itemSudije);
+
+        itemEkipe.setText("Ekipe");
+        org.add(itemEkipe);
+
+        itemIgraci.setText("Igraci");
+        org.add(itemIgraci);
+
+        itemHale.setText("Hale");
+        org.add(itemHale);
+
+        jMenuBar1.add(org);
 
         setJMenuBar(jMenuBar1);
 
@@ -79,9 +109,12 @@ public class MainForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void itemUgovoriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemUgovoriActionPerformed
-        System.out.println("form.view.MainForm.itemUgovoriActionPerformed()");
-        new Ugovori(this).setVisible(true);
+        new UgovoriForm(this).setVisible(true);
     }//GEN-LAST:event_itemUgovoriActionPerformed
+
+    private void itemDelegatiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemDelegatiActionPerformed
+        new DelegatiForm(this).setVisible(true);
+    }//GEN-LAST:event_itemDelegatiActionPerformed
 
     /**
      * @param args the command line arguments
@@ -114,12 +147,18 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenu RSS;
+    private javax.swing.JMenu doc;
+    private javax.swing.JMenuItem itemDelegati;
+    private javax.swing.JMenuItem itemEkipe;
+    private javax.swing.JMenuItem itemHale;
+    private javax.swing.JMenuItem itemIgraci;
     private javax.swing.JMenuItem itemIzvestaji;
     private javax.swing.JMenuItem itemRasporedi;
     private javax.swing.JMenuItem itemSastavi;
+    private javax.swing.JMenuItem itemSudije;
     private javax.swing.JMenuItem itemUgovori;
     private javax.swing.JMenuItem itemUtakmice;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenu org;
     // End of variables declaration//GEN-END:variables
 }

@@ -20,10 +20,19 @@ public class Mesto implements GenericEntity {
 
     private String naziv;
 
+    public Mesto() {
+
+    }
+
     public Mesto(Long idMesto, Opstina opstina, String naziv) {
         this.idMesto = idMesto;
         this.opstina = opstina;
         this.naziv = naziv;
+    }
+    
+    public Mesto(Long idMesto, Opstina opstina){
+        this.idMesto = idMesto;
+        this.opstina = opstina;
     }
 
     public Long getIdMesto() {
@@ -71,7 +80,15 @@ public class Mesto implements GenericEntity {
             return false;
         }
         final Mesto other = (Mesto) obj;
-        return true;
+        if (!Objects.equals(this.naziv, other.naziv)) {
+            return false;
+        }
+        return Objects.equals(this.idMesto, other.idMesto);
+    }
+
+    @Override
+    public String toString() {
+        return naziv;
     }
 
     @Override
@@ -96,12 +113,13 @@ public class Mesto implements GenericEntity {
 
     @Override
     public String getSelectedValues() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "select m.idmesto, m.naziv as m_naziv, o.idopstina, o.naziv as o_naziv from mesto m inner join opstina o on o.idopstina = m.idmesto";
     }
 
     @Override
     public GenericEntity getNewObject(ResultSet rs) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return new Mesto(rs.getLong("idmesto"), new Opstina(rs.getLong("idopstina"), rs.getString("o_naziv")),
+                rs.getString("m_naziv"));
     }
 
     @Override

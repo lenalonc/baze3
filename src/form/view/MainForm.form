@@ -7,9 +7,9 @@
         <Property name="toolTipText" type="java.lang.String" value=""/>
       </Properties>
       <SubComponents>
-        <Menu class="javax.swing.JMenu" name="RSS">
+        <Menu class="javax.swing.JMenu" name="doc">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Meni"/>
+            <Property name="text" type="java.lang.String" value="Dokumenta"/>
           </Properties>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="itemUgovori">
@@ -38,6 +38,41 @@
             <MenuItem class="javax.swing.JMenuItem" name="itemUtakmice">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Utakmice"/>
+              </Properties>
+            </MenuItem>
+          </SubComponents>
+        </Menu>
+        <Menu class="javax.swing.JMenu" name="org">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Organizacija"/>
+          </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="itemDelegati">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Delegati"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="itemDelegatiActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="itemSudije">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Sudije"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="itemEkipe">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Ekipe"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="itemIgraci">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Igraci"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="itemHale">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Hale"/>
               </Properties>
             </MenuItem>
           </SubComponents>

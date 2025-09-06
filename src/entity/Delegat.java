@@ -18,18 +18,22 @@ public class Delegat implements GenericEntity {
 
     private String imePrezime;
 
-    private Long jmbg;
+    private String jmbg;
 
     private ZaposlenostStatusEnum zaposlenostStatus;
 
     private Broj broj;
+
+    public Delegat() {
+
+    }
 
     public Delegat(Long idDelegat, String imePrezime) {
         this.idDelegat = idDelegat;
         this.imePrezime = imePrezime;
     }
 
-    public Delegat(Long idDelegat, String imePrezime, Long jmbg, ZaposlenostStatusEnum zaposlenostStatus, Broj broj) {
+    public Delegat(Long idDelegat, String imePrezime, String jmbg, ZaposlenostStatusEnum zaposlenostStatus, Broj broj) {
         this.idDelegat = idDelegat;
         this.imePrezime = imePrezime;
         this.jmbg = jmbg;
@@ -53,11 +57,11 @@ public class Delegat implements GenericEntity {
         this.imePrezime = imePrezime;
     }
 
-    public Long getJmbg() {
+    public String getJmbg() {
         return jmbg;
     }
 
-    public void setJmbg(Long jmbg) {
+    public void setJmbg(String jmbg) {
         this.jmbg = jmbg;
     }
 
@@ -122,32 +126,66 @@ public class Delegat implements GenericEntity {
 
     @Override
     public String getTableName() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "delegat";
     }
 
     @Override
     public String getColumnNamesForInsert() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "(iddelegat, imeprezime, jmbg, zaposlenoststatus, idbroj, idulica, idmesto, idopstina)";
     }
 
     @Override
     public String getInsertValues() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        String[] ime_prezime = imePrezime.split(" ");
+        String ime = ime_prezime[0];
+        String prezime = ime_prezime[1];
+        StringBuilder sb = new StringBuilder();
+        sb.append("(")
+                .append("delegat_pk_seq.nextval,")
+                .append("imeprezime('").append(ime).append("','").append(prezime).append("'),")
+                .append("jmbg_id('").append(jmbg).append("'),")
+                .append("'").append(zaposlenostStatus.name()).append("',")
+                .append(broj.getIdBroj()).append(",")
+                .append(broj.getUlica().getIdUlica()).append(",")
+                .append(broj.getUlica().getMesto().getIdMesto()).append(",")
+                .append(broj.getUlica().getMesto().getOpstina().getIdOpstina())
+                .append(") ")
+                .append("returning iddelegat into ?");
+        return sb.toString();
     }
 
     @Override
     public void setId(Long id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        this.idDelegat = id;
     }
 
     @Override
     public String getSelectedValues() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "select d.iddelegat, d.imeprezime.puno_ime() as d_imeprezime, d.zaposlenoststatus, d.jmbg.value as jmbg, b.idbroj, b.vrednost as b_vrednost, u.idulica, u.naziv as u_naziv, "
+                + "m.idmesto, m.naziv as m_naziv, o.idopstina, o.naziv as o_naziv from delegat d left join broj b on b.idbroj = d.idbroj and b.idulica = d.idulica and b.idmesto = d.idmesto and b.idopstina = d.idopstina left join ulica u on u.idulica = d.idulica "
+                + "and u.idmesto = d.idmesto and u.idopstina = d.idopstina "
+                + "left join mesto m on m.idmesto = d.idmesto and m.idopstina = d.idopstina left join opstina o on o.idopstina = d.idopstina";
     }
 
     @Override
     public GenericEntity getNewObject(ResultSet rs) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        String zaposlenost = rs.getString("zaposlenoststatus");
+        ZaposlenostStatusEnum zEnum;
+
+        if (zaposlenost.toUpperCase().equals(ZaposlenostStatusEnum.ZAPOSLEN.name())) {
+            zEnum = ZaposlenostStatusEnum.ZAPOSLEN;
+        } else if (zaposlenost.toUpperCase().equals(ZaposlenostStatusEnum.STUDENT.name())) {
+            zEnum = ZaposlenostStatusEnum.STUDENT;
+        } else if (zaposlenost.toUpperCase().equals(ZaposlenostStatusEnum.PENZIONER.name())) {
+            zEnum = ZaposlenostStatusEnum.PENZIONER;
+        } else {
+            zEnum = ZaposlenostStatusEnum.NEZAPOSLEN;
+        }
+
+        return new Delegat(rs.getLong("iddelegat"), rs.getString("d_imeprezime"), rs.getString("jmbg"), zEnum,
+                new Broj(rs.getLong("idbroj"), rs.getString("b_vrednost"), new Ulica(rs.getLong("idulica"),
+                        new Mesto(rs.getLong("idmesto"),
+                                new Opstina(rs.getLong("idopstina"), rs.getString("o_naziv")), rs.getString("m_naziv")), rs.getString("u_naziv"))));
     }
 
     @Override

@@ -20,4 +20,6 @@ public interface Repository<T> {
     boolean delete(T t) throws Exception;
     
     T getById(T t) throws Exception;
+    
+    List<T> getWithCondition(T t, String whereClause) throws Exception;
 }

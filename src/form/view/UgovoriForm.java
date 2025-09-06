@@ -16,14 +16,14 @@ import view.components.TableModelUgovori;
  *
  * @author user
  */
-public class Ugovori extends javax.swing.JFrame {
+public class UgovoriForm extends javax.swing.JFrame {
 
     /**
-     * Creates new form Ugovori
+     * Creates new form UgovoriForm
      */
     MainForm parent;
 
-    public Ugovori(MainForm parent) {
+    public UgovoriForm(MainForm parent) {
         initComponents();
         this.parent = parent;
         prepareForm();
@@ -83,11 +83,9 @@ public class Ugovori extends javax.swing.JFrame {
         List<Ugovor> ugovori = new ArrayList<>();
         try {
             ugovori = Controller.getInstance().getUgovor(new Ugovor());
-
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        //ovde ide poziv ka bazi
         prepareTable(ugovori);
     }
 

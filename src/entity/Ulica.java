@@ -20,10 +20,19 @@ public class Ulica implements GenericEntity {
 
     private String naziv;
 
+    public Ulica() {
+
+    }
+
     public Ulica(Long idUlica, Mesto mesto, String naziv) {
         this.idUlica = idUlica;
         this.mesto = mesto;
         this.naziv = naziv;
+    }
+
+    public Ulica(Long idUlica, Mesto mesto) {
+        this.idUlica = idUlica;
+        this.mesto = mesto;
     }
 
     public Long getIdUlica() {
@@ -71,37 +80,68 @@ public class Ulica implements GenericEntity {
             return false;
         }
         final Ulica other = (Ulica) obj;
-        return true;
+        if (!Objects.equals(this.naziv, other.naziv)) {
+            return false;
+        }
+        if (!Objects.equals(this.idUlica, other.idUlica)) {
+            return false;
+        }
+        return Objects.equals(this.mesto, other.mesto);
+    }
+
+    @Override
+    public String toString() {
+        return naziv;
     }
 
     @Override
     public String getTableName() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "ulica";
     }
 
     @Override
     public String getColumnNamesForInsert() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "(idulica, naziv, idmesto, idopstina)";
     }
 
     @Override
     public String getInsertValues() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        StringBuilder sb = new StringBuilder();
+        sb.append("(")
+                .append("ulica_pk_seq.nextval").append(",")
+                .append("'").append(naziv).append("',")
+                .append(mesto.getIdMesto()).append(",")
+                .append(mesto.getOpstina().getIdOpstina())
+                .append(") ")
+                .append("returning idulica into ?");
+        return sb.toString();
     }
 
     @Override
     public void setId(Long id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        idUlica = id;
+    }
+
+    public String getWhereClause(Mesto mesto, Ulica ulica) {
+        StringBuilder sb = new StringBuilder();
+        if (ulica != null && ulica.getNaziv() != null) {
+            sb.append("u.naziv = '").append(ulica.getNaziv()).append("' and ");
+        }
+        sb.append("u.idmesto = ").append(mesto.getIdMesto()).append(" and u.idopstina = ").append(mesto.getOpstina().getIdOpstina());
+        return sb.toString();
     }
 
     @Override
     public String getSelectedValues() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "select u.idulica, u.naziv as u_naziv, m.idmesto, m.naziv as m_naziv, o.idopstina, o.naziv as o_naziv from ulica u inner join mesto m on u.idmesto = m.idmesto and u.idopstina = m.idopstina inner join opstina o"
+                + " on o.idopstina = u.idopstina";
     }
 
     @Override
     public GenericEntity getNewObject(ResultSet rs) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return new Ulica(rs.getLong("idulica"),
+                new Mesto(rs.getLong("idmesto"),
+                        new Opstina(rs.getLong("idopstina"), rs.getString("o_naziv")), rs.getString("m_naziv")), rs.getString("u_naziv"));
     }
 
     @Override
