@@ -24,4 +24,6 @@ public interface IValidator {
     public void validateGetUlicaWithNazivCondition(Ulica ulica) throws ValidatorException;
     
     public void validateCreateUlica(Ulica ulica) throws ValidatorException;
+    
+    public void validateUpdateDelegat(Delegat delegat) throws ValidatorException;
 }

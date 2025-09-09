@@ -86,4 +86,28 @@ public class RegularValidator implements IValidator {
         }
     }
 
+    @Override
+    public void validateUpdateDelegat(Delegat delegat) throws ValidatorException {
+        if (delegat.getIdDelegat() == null) {
+            throw new ValidatorException("Delegat nema id");
+        }
+
+        if (delegat.getImePrezime() == null || delegat.getImePrezime().isBlank()) {
+            throw new ValidatorException("Unesite ime i prezime delegata");
+        }
+        if (delegat.getJmbg() == null || delegat.getJmbg().length() != 13 || !delegat.getJmbg().chars().allMatch(Character::isDigit)) {
+            throw new ValidatorException("JMBG delegata mora da sadrzi 13 cifara");
+        }
+        if (delegat.getZaposlenostStatus() == null) {
+            throw new ValidatorException("Unesite status zaposlenja delegata");
+        }
+
+        if (delegat.getBroj() == null || delegat.getBroj().getIdBroj() == null || delegat.getBroj().getUlica() == null
+                || delegat.getBroj().getUlica().getIdUlica() == null || delegat.getBroj().getUlica().getMesto() == null
+                || delegat.getBroj().getUlica().getMesto().getIdMesto() == null || delegat.getBroj().getUlica().getMesto().getOpstina() == null
+                || delegat.getBroj().getUlica().getMesto().getOpstina().getIdOpstina() == null) {
+            throw new ValidatorException("Unesite adresu delegata");
+        }
+    }
+
 }

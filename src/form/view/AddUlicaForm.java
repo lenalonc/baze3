@@ -10,6 +10,7 @@ import entity.Opstina;
 import entity.Ulica;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
@@ -21,11 +22,11 @@ public class AddUlicaForm extends javax.swing.JDialog {
     /**
      * Creates new form AddUlicaForm
      */
-    AddDelegatForm parent;
+    JFrame parent;
 
     Mesto mesto;
 
-    public AddUlicaForm(AddDelegatForm parent, boolean modal, Mesto mesto) {
+    public AddUlicaForm(JFrame parent, boolean modal, Mesto mesto) {
         super(parent, modal);
         initComponents();
         this.parent = parent;
@@ -151,8 +152,12 @@ public class AddUlicaForm extends javax.swing.JDialog {
                 if (ulica == null || ulica.getIdUlica() == null) {
                     JOptionPane.showMessageDialog(this, "Greska prilikom cuvanja ulice", "", JOptionPane.ERROR_MESSAGE);
                     return;
-                }else{
-                    parent.reloadUlice(mesto);
+                } else {
+                    if (parent instanceof AddDelegatForm) {
+                        ((AddDelegatForm) parent).reloadUlice(mesto);
+                    } else if(parent instanceof DetailsDelegatForm){
+                        ((DetailsDelegatForm) parent).reloadUlice(mesto);
+                    }
                     this.dispose();
                 }
             }

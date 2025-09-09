@@ -78,17 +78,66 @@ public class RepositoryDBGeneric implements DBRepository<GenericEntity> {
 
     @Override
     public GenericEntity update(GenericEntity t) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            Connection connection = DBConnectionFactory.getInstance().getConnection();
+            StringBuilder sb = new StringBuilder();
+            sb.append("UPDATE ")
+                    .append(t.getTableName())
+                    .append(" SET ")
+                    .append(t.getUpdateSetValues(t))
+                    .append(" WHERE ")
+                    .append(t.getDeleteAndUpdateCondition(t));
+            String query = sb.toString();
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(query);
+            statement.close();
+            return t;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
     }
 
     @Override
     public boolean delete(GenericEntity t) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            Connection connection = DBConnectionFactory.getInstance().getConnection();
+            StringBuilder sb = new StringBuilder();
+            sb.append("DELETE FROM ")
+                    .append(t.getTableName())
+                    .append(" WHERE ")
+                    .append(t.getDeleteAndUpdateCondition(t));
+
+            Statement statement = connection.createStatement();
+            String query = sb.toString();
+            statement.executeUpdate(query);
+            statement.close();
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return false;
     }
 
     @Override
     public GenericEntity getById(GenericEntity t) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            Connection connection = DBConnectionFactory.getInstance().getConnection();
+            StringBuilder sb = new StringBuilder();
+            sb.append(t.getSelectedValues())
+                    .append(" WHERE ")
+                    .append(t.getDeleteAndUpdateCondition(t));
+            String query = sb.toString();
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(query);
+            if (rs.next()) {
+                GenericEntity e = t.getNewObject(rs);
+                return e;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
     }
 
     @Override

@@ -8,6 +8,7 @@ import controller.Controller;
 import entity.Delegat;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 import view.components.TableModelDelegati;
 
 /**
@@ -39,6 +40,7 @@ public class DelegatiForm extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDelegati = new javax.swing.JTable();
         btnAdd = new javax.swing.JButton();
+        btnEdit = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -62,6 +64,13 @@ public class DelegatiForm extends javax.swing.JFrame {
             }
         });
 
+        btnEdit.setText("Detalji");
+        btnEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -69,7 +78,10 @@ public class DelegatiForm extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(31, 31, 31)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnAdd)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnAdd)
+                        .addGap(33, 33, 33)
+                        .addComponent(btnEdit))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 818, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(47, Short.MAX_VALUE))
         );
@@ -77,7 +89,9 @@ public class DelegatiForm extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(35, Short.MAX_VALUE)
-                .addComponent(btnAdd)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAdd)
+                    .addComponent(btnEdit))
                 .addGap(31, 31, 31)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(40, 40, 40))
@@ -89,6 +103,32 @@ public class DelegatiForm extends javax.swing.JFrame {
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         new AddDelegatForm(this).setVisible(true);
     }//GEN-LAST:event_btnAddActionPerformed
+
+    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
+        if (tblDelegati.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(this, "Izaberite delegata da vidite detalje", "Selektujete jedan red", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        if (tblDelegati.getSelectedRowCount() > 1) {
+            JOptionPane.showMessageDialog(this, "Izbaerite jednog delegata da vidite detalje", "Selektujete jedan red", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        Delegat delegat = (Delegat) ((TableModelDelegati) tblDelegati.getModel()).getDelegati().get(tblDelegati.getSelectedRow());
+
+        try {
+            Delegat result = Controller.getInstance().getDelegatById(delegat);
+            if (result != null && result.getBroj() != null && result.getBroj().getUlica() != null && result.getBroj().getUlica().getMesto() != null && delegat.getBroj().getUlica().getMesto().getOpstina() != null) {
+                new DetailsDelegatForm(this, result).setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(this, "Sistem ne moze da ucita detalje delegata", "", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Sistem ne moze da ucita detalje delegata", "", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }//GEN-LAST:event_btnEditActionPerformed
 
     /**
      * @param args the command line arguments
@@ -106,9 +146,14 @@ public class DelegatiForm extends javax.swing.JFrame {
     private void prepareTable(List<Delegat> delegati) {
         tblDelegati.setModel(new TableModelDelegati(delegati));
     }
+    
+    public void reloadTable(){
+        prepareForm();
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnEdit;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblDelegati;
     // End of variables declaration//GEN-END:variables

@@ -45,7 +45,7 @@ public class Delegat implements GenericEntity {
         return idDelegat;
     }
 
-    public void setIdDelegat(Long IdDelegat) {
+    public void setIdDelegat(Long idDelegat) {
         this.idDelegat = idDelegat;
     }
 
@@ -190,12 +190,24 @@ public class Delegat implements GenericEntity {
 
     @Override
     public String getDeleteAndUpdateCondition(Object object) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "iddelegat=" + ((Delegat) object).getIdDelegat();
     }
 
     @Override
     public String getUpdateSetValues(Object object) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Delegat delegat = (Delegat) object;
+        String[] ime_prezime = imePrezime.split(" ");
+        String ime = ime_prezime[0];
+        String prezime = ime_prezime[1];
+        StringBuilder sb = new StringBuilder();
+        sb.append("imeprezime = imeprezime('").append(ime).append("','").append(prezime).append("'),")
+                .append("jmbg = jmbg_id('").append(jmbg).append("'),")
+                .append("zaposlenoststatus = '").append(delegat.getZaposlenostStatus().name()).append("',")
+                .append("idbroj = ").append(delegat.getBroj().getIdBroj()).append(",")
+                .append("idulica = ").append(delegat.getBroj().getUlica().getIdUlica()).append(",")
+                .append("idmesto = ").append(delegat.getBroj().getUlica().getMesto().getIdMesto()).append(",")
+                .append("idopstina = ").append(delegat.getBroj().getUlica().getMesto().getOpstina().getIdOpstina());
+        return sb.toString();
     }
 
 }

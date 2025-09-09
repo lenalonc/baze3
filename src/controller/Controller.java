@@ -14,7 +14,10 @@ import operation.AbstractGenericOperation;
 import operation.broj.CreateBroj;
 import operation.broj.GetBrojByVrednost;
 import operation.delegat.CreateDelegat;
+import operation.delegat.DeleteDelegat;
 import operation.delegat.GetDelegat;
+import operation.delegat.GetDelegatById;
+import operation.delegat.UpdateDelegat;
 import operation.mesto.GetMesto;
 import operation.ugovor.GetUgovor;
 import operation.ulica.CreateUlica;
@@ -27,7 +30,7 @@ import operation.ulica.GetUlicaWithNazivCondition;
  */
 public class Controller {
 
-    public static Controller instance;
+    private static Controller instance;
     private AbstractGenericOperation operation;
 
     public Controller() {
@@ -64,11 +67,11 @@ public class Controller {
         operation.execute(object);
         return ((GetUlicaWithMestoCondition) operation).getUlice();
     }
-    
-    public Ulica getUlicaWithNazivCondition(Ulica object) throws Exception{
+
+    public Ulica getUlicaWithNazivCondition(Ulica object) throws Exception {
         operation = new GetUlicaWithNazivCondition();
         operation.execute(object);
-        return ((GetUlicaWithNazivCondition)operation).getUlica();
+        return ((GetUlicaWithNazivCondition) operation).getUlica();
     }
 
     public Broj getBrojByVrednost(Broj broj) throws Exception {
@@ -77,21 +80,39 @@ public class Controller {
         return ((GetBrojByVrednost) operation).getBroj();
     }
 
+    public Delegat getDelegatById(Delegat delegat) throws Exception {
+        operation = new GetDelegatById();
+        operation.execute(delegat);
+        return ((GetDelegatById) operation).getDelegat();
+    }
+
     public Broj createBroj(Broj broj) throws Exception {
         operation = new CreateBroj();
         operation.execute(broj);
         return ((CreateBroj) operation).getBroj();
     }
-    
-    public Delegat createDelegat(Delegat delegat) throws Exception{
+
+    public Delegat createDelegat(Delegat delegat) throws Exception {
         operation = new CreateDelegat(delegat);
         operation.execute(delegat);
-        return ((CreateDelegat)operation).getDelegat();
+        return ((CreateDelegat) operation).getDelegat();
     }
-    
-    public Ulica createUlica(Ulica ulica) throws Exception{
+
+    public Ulica createUlica(Ulica ulica) throws Exception {
         operation = new CreateUlica();
         operation.execute(ulica);
-        return ((CreateUlica)operation).getUlica();
+        return ((CreateUlica) operation).getUlica();
+    }
+
+    public boolean deleteDelegat(Delegat delegat) throws Exception {
+        operation = new DeleteDelegat();
+        operation.execute(delegat);
+        return ((DeleteDelegat) operation).isFlag();
+    }
+
+    public Delegat updateDelegat(Delegat delegat) throws Exception {
+        operation = new UpdateDelegat();
+        operation.execute(delegat);
+        return ((UpdateDelegat) operation).getDelegat();
     }
 }
